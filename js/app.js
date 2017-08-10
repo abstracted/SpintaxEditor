@@ -119,25 +119,26 @@
             restore: function() {
                 Editor.elementNode.innerHTML = this.storage.content[this.index];
                 Editor.selection.getCaret(this.storage.caret[this.index]);
-                this.preventUpdate = true;
-                console.log('preventUpdate ' + this.preventUpdate);
             },
             clean: function() {
                 this.storage.content.shift();
                 this.storage.caret.shift();
+                this.index--;
             },
             save: function(content, caret) {
+                if (this.storage.content.length > this.max) {
+                    this.clean();
+                }
 
                 this.storage.content[this.index] = content;
                 this.storage.caret[this.index] = caret;
 
+                this.index++;
+
                 console.log('UPDATE HISTORY Fired')
                 console.log(this.storage);
+                console.log('History Index ' + this.index)
 
-                this.index++;
-                if (this.storage.content.length >= this.max) {
-                    this.clean();
-                }
             },
             undo: function() {
                 if (this.index > 0) {
@@ -147,7 +148,7 @@
                 }
             },
             redo: function() {
-                if (this.index < this.storage.content.length + 1 && this.index < this.max) {
+                if (this.index < this.storage.content.length && this.index < this.max) {
                     console.log('REDO Fired')
                     this.index++;
                     this.restore();
@@ -314,7 +315,6 @@
             this.selection.setCollapsed();
         },
         setContent: function() {
-
             if (this.highlightMode === 'advanced') {
                 this.elementNode.innerHTML = this.getHighlight(this.elementNode.innerHTML, this.highlightRules.advanced, this.debugMode);
             } else if (this.highlightMode === 'simple') {
@@ -420,6 +420,12 @@
             case 'load':
                 Env.init();
                 Editor.init(event);
+                clearTimeout(Editor.timeout);
+                Editor.timeout = setTimeout(() => {
+                    let caret = rangy.saveSelection();
+                    Editor.history.save(Editor.getClean(Editor.elementNode.innerHTML), caret)
+                    rangy.removeMarkers(caret);
+                }, 400);
             default:
                 Editor.getResize();
                 break;
@@ -438,7 +444,7 @@
 
     setEvent(document, 'keydown', (event) => {
 
-        console.log(event.type + ' fired');
+        // console.log(event.type + ' fired');
 
         if (event.shiftKey === false && event.ctrlKey && event.key.toUpperCase() === 'Z') {
             Editor.history.undo();
@@ -462,13 +468,13 @@
         //      New carets to be saved or restored on
         // 
 
-        console.log(event.type + ' fired');
+        // console.log(event.type + ' fired');
 
-        Editor.selection.setCaret();
+        // Editor.selection.setCaret();
 
-        Editor.setContent();
+        // Editor.setContent();
 
-        Editor.selection.getCaret();
+        // Editor.selection.getCaret();
 
         clearTimeout(Editor.timeout);
         Editor.timeout = setTimeout(() => {

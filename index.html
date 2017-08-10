@@ -1,37 +1,37 @@
-<html>
+<html class="env-root">
 
 <head>
-<link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Spintax Editor</title>
 </head>
 
-<body>
+<body class="env-body">
     <main>
-        <div class="editor-toolbox" id="editor-toolbox">
+        <div class="editor-toolbox" id="editorToolbox">
             <h3 class="editor-toolbox-title">Toolbox</h3>
-            <div class="editor-tool" id="simpleMode">help mode</div>
-            <div class="editor-tool" id="rotateColor">change color</div>
-            <div class="editor-tool" id="invertLumin">invert color</div>
-            <div class="editor-tool" id="fontPlus">increase font</div>
-            <div class="editor-tool" id="fontMinus">decrease font</div>
+            <div class="editor-tool" id="editorHelp">help mode</div>
+            <div class="editor-tool" id="editorColor">change color</div>
+            <div class="editor-tool" id="editorInvert">invert color</div>
+            <div class="editor-tool" id="editorPlus">increase font</div>
+            <div class="editor-tool" id="editorMinus">decrease font</div>
             <div class="editor-tool" id="editorExtend">extend editor</div>
-            <div class="editor-tool" id="getText">copy text</div>
-            <div class="editor-tool" id="getPreview">preview spin</div>
-            <div class="editor-tool" id="simpleMode">simple mode</div>
+            <div class="editor-tool" id="editorCopy">copy text</div>
+            <div class="editor-tool" id="editorPreview">preview spin</div>
+            <div class="editor-tool" id="editorSimple">simple mode</div>
         </div>
-        <div class="spin-container">
-            <h1 class="title">Spintax editor</h1>
-            <div class="spin-border" id="spin-border">
-                <div id="spin-editor" class="spin-editor" contentEditable="true">
-                    
-                </div>
-                <div class="spin-infobox">
-                    <div class="spin-info">Unclosed Tags: <span id="unClosedTags" class="spin-info-result">nothing to report</span></div>
-                    <div class="spin-info">Approx Word Count: <span id="generalErrors" class="spin-info-result">nothing to report</span></div>
+        <div class="editor-container">
+            <h1 class="editor-title">{Spintax editor}</h1>
+            <div class="editor-border" id="editorBorder">
+                <div class="editor-content" id="editorContent" contentEditable="true">Sample sentence: {{A|The|One} {quick|magnificent|charming|lucky|fast|super|cool} {gold|tan|yellow|white|brown|silver} {beaver|packrat|cat|lion|tiger|fox|dog|wolf} {consumed|ate|pilfered} my {pastry|streudel|cake}.} {Start a new sentence and make an {interesting|developed|unique} paragraph!}</div>
+                <div class="editor-infobox">
+                    <div class="editor-info">Unclosed Tags: <span id="editorTagErrors" class="editor-info-result editor-info-tags">nothing to report</span></div>
+                    <div class="editor-info">Approx Word Count: <span id="editorWordCount" class="editor-info-result editor-info-words">nothing to report</span></div>
                 </div>
             </div>
         </div>
     </main>
 </body>
+
 <script src="js/rangy/external/log4javascript.js"></script>
 <script src="js/rangy/src/core/core.js"></script>
 <script src="js/rangy/src/core/dom.js"></script>
@@ -40,6 +40,7 @@
 <script src="js/rangy/src/core/wrappedselection.js"></script>
 <script src="js/rangy/src/modules/rangy-selectionsaverestore.js"></script>
 <script src="js/rangy/src/modules/rangy-util.js"></script>
+
 <script src="js/app.js"></script>
 
 </html>

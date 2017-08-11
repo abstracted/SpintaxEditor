@@ -11,18 +11,19 @@
        background: #363036;
        width: 100%;
        min-height: 100%;
+       box-shadow: inset 0px 0px 100px hsla(259, 30%, 55%, 0.2);
    }
 
    .editor-toolbox {
        font-family: monospace;
        position: fixed;
        top: -100%;
-       right: 0px;
+       right: 10px;
        display: flex;
        flex-direction: column;
        transition: top 1000ms ease;
        color: #AB9BAB;
-       border-left: 2px solid;
+       border-right: 2px solid;
        border-bottom: 2px solid;
        border-color: #7B59C0;
        box-shadow: 0px 0px 20px hsla(259, 44%, 55%, 0.4);
@@ -34,17 +35,36 @@
        user-select: none;
    }
 
+    .editor-toolbox-title {
+       padding: 12px 0px 8px 18px;
+       letter-spacing: 5px;
+       background-color: #1b181b;
+       font-weight: normal;
+       text-transform: lowercase;
+       margin-bottom: 0;
+       margin-top: 0px;
+       border-top: 1px solid;
+       border-left: 2px solid;
+       border-bottom: 1px solid;
+       border-color: #7B59C0;
+   }
+
    .editor-tool {
        display: flex;
        align-items: center;
        justify-content: flex-start;
        text-align: left;
-       width: 120px;
+       width: 110px;
        padding: 15px;
        text-transform: uppercase;
        font-size: 10pt;
-       border-right: 1px solid;
+       border-left: 1px solid;
        border-color: #7B59C0;
+   }
+   .editor-tool:hover:not(.disabled) {
+      background-color: #633fab;
+      box-shadow: 0px 0px 50px hsla(259, 44%, 55%, 0.4);
+      animation: animatedBright 1500ms linear infinite;
    }
 
    .editor-tool:nth-child(odd) {
@@ -61,20 +81,7 @@
 
    .editor-tool.disabled {
        background-color: #615676;
-       color: #453a45;
-   }
-
-   .editor-toolbox-title {
-       padding: 12px 65px 8px 18px;
-       background-color: #1b181b;
-       font-weight: normal;
-       text-transform: capitalize;
-       margin-bottom: 0;
-       margin-top: 0px;
-       border-top: 1px solid;
-       border-right: 2px solid;
-       border-bottom: 1px solid;
-       border-color: #7B59C0;
+       color: #2f272f;
    }
 
    .editor-container {
@@ -90,7 +97,9 @@
        justify-content: center;
        align-items: stretch;
        border: 1px solid #7B59C0;
-       box-shadow: 0px 0px 20px hsla(259, 44%, 55%, 0.4);
+       border-right: 2px solid #7B59C0;
+       border-bottom: 2px solid #7B59C0;
+       box-shadow: 0px 0px 20px hsla(259, 44%, 55%, 0.6);
    }
 
    .editor-content {
@@ -106,8 +115,6 @@
        background: #1B181B;
        transition: all 400ms ease;
        overflow-wrap: break-word;
-/*       white-space: normal;
-*/       
        word-wrap: break-word;
        word-break: break-all;
    }
@@ -248,4 +255,10 @@
        50% {
            opacity: .5;
        }
+   }
+   @keyframes animatedBright {
+      50% {
+          filter: brightness(130%);
+          box-shadow: 0px 0px 80px hsla(259, 44%, 55%, 0.4);
+      }
    }

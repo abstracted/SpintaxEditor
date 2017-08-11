@@ -123,7 +123,7 @@
             },
             modifyKey: false,
             ctrlKey: false,
-            restore: function() {        
+            restore: function() {
                 Editor.elementNode.innerHTML = this.storage.content[this.index];
                 Editor.setContent();
                 Editor.selection.getCaret(this.storage.caret[this.index]);
@@ -187,12 +187,23 @@
                 this.fontSizeMax = this.fontSizeIndex * 2;
                 this.invertMode = false;
                 this.lineHeight = 30;
+                this.previewActive = false;
+                this.previewText = '';
             },
             getCopy: function() {
 
             },
             getPreview: function() {
-
+                let spintaxText = Editor.elementNode.textContent;
+                let matches, options, random;
+                let regEx = new RegExp(/{([^{}]+?)}/);
+                while ((matches = regEx.exec(spintaxText)) !== null) {
+                    options = matches[1].split("|");
+                    random = Math.floor(Math.random() * options.length);
+                    spintaxText = spintaxText.replace(matches[0], options[random]);
+                }
+                this.previewText = spintaxText;
+                console.log(spintaxText);
             },
             setHelp: function() {
 
@@ -262,7 +273,10 @@
                     this.extendButton.classList.add('disabled');
 
                     Env.setStyle(Editor.elementNode.className, 'overflow-y', 'hidden', 'class');
-                    Env.setStyle(Editor.elementNode.className, 'height', 'auto', 'class');
+                    // This stopped working for some reason 
+                    // Env.setStyle(Editor.elementNode.className, 'height', 'auto', 'class');
+                    Editor.elementNode.style.height = 'auto';
+
 
                     Env.setStyle(Editor.containerNode.className, 'padding', '3% 1% 4.5%', 'class');
                     Env.setStyle(Editor.titleNode.className, 'display', 'none', 'class');
@@ -275,7 +289,9 @@
                     this.extendButton.classList.remove('disabled');
 
                     Env.setStyle(Editor.elementNode.className, 'overflow-y', 'scroll', 'class');
-                    Env.setStyle(Editor.elementNode.className, 'height', '60%');
+                    // This stopped working for some reason 
+                    // Env.setStyle(Editor.elementNode.className, 'height', '60%');
+                    Editor.elementNode.style.height = '60%';
 
                     Env.setStyle(Editor.containerNode.className, 'padding', '3% 5% 4.5%', 'class');
                     Env.setStyle(Editor.titleNode.className, 'display', 'block', 'class');
@@ -466,7 +482,7 @@
 
     /*---------------------------------------------------------------------------------*/
 
-    function setEvent(element, eventList, func) {
+    function addEvents(element, eventList, func) {
         let event = eventList.split(', ');
 
         for (let i = 0; i < event.length; i++) {
@@ -474,18 +490,18 @@
         }
     }
 
-    setEvent(document, 'dragstart, drop, contextmenu', (event) => {
+    addEvents(document, 'dragstart, drop', (event) => {
         event.preventDefault();
         event.stopPropagation();
 
         return false;
     });
 
-    setEvent(document, 'copy, cut, paste', (event) => {
+    addEvents(document, 'copy, cut, paste', (event) => {
         Editor.clipboard(event);
     });
 
-    setEvent(window, 'load, resize', (event) => {
+    addEvents(window, 'load, resize', (event) => {
         switch (event.type) {
             case 'load':
                 Env.init();
@@ -502,15 +518,15 @@
         }
     });
 
-    setEvent(document, 'keydown', (event) => {
+    addEvents(document, 'keydown', (event) => {
         Editor.keyDownHandler(event);
     });
 
-    setEvent(document, 'keyup', (event) => {
+    addEvents(document, 'keyup', (event) => {
         Editor.keyupHandler(event);
     });
 
-    setEvent(document, 'click', (event) => {
+    addEvents(document, 'click', (event) => {
         switch (event.target.getAttribute("id")) {
             case 'editorHelp':
 
@@ -534,7 +550,7 @@
 
                 break;
             case 'editorPreview':
-
+                Editor.toolbox.getPreview();
                 break;
             case 'editorSimple':
 
@@ -547,24 +563,6 @@
     });
 
 })();
-
-
-
-
-
-
-// Spintax Renderer
-//https://ctrlq.org/code/20277-javascript-spintax
-// var text = "{{Hello|Hi|Hola}, How {have you been|are you doing}? " +
-//            "Take care. {{Thanks and|Best} Regards|Cheers|Thanks}";
-// var matches, options, random;
-// var regEx = new RegExp(/{([^{}]+?)}/);
-// while((matches = regEx.exec(text)) !== null) {
-//   options = matches[1].split("|");
-//   random = Math.floor(Math.random() * options.length);
-//   text = text.replace(matches[0], options[random]);
-// }
-// console.log(text);
 
 /* -----------------------------------------------------------------------------------
         

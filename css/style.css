@@ -35,7 +35,7 @@
        user-select: none;
    }
 
-    .editor-toolbox-title {
+   .editor-toolbox-title {
        padding: 12px 0px 8px 18px;
        letter-spacing: 5px;
        background-color: #1b181b;
@@ -61,10 +61,11 @@
        border-left: 1px solid;
        border-color: #7B59C0;
    }
+
    .editor-tool:hover:not(.disabled) {
-      background-color: #633fab;
-      box-shadow: 0px 0px 50px hsla(259, 44%, 55%, 0.4);
-      animation: animatedBright 1500ms linear infinite;
+       background-color: #633fab;
+       box-shadow: 0px 0px 50px hsla(259, 44%, 55%, 0.4);
+       animation: animatedBright 1500ms linear infinite;
    }
 
    .editor-tool:nth-child(odd) {
@@ -167,7 +168,8 @@
        text-transform: lowercase;
    }
 
-   .editor-title {
+   .editor-title,
+   {
        font-family: sans-serif;
        font-weight: 900;
        text-align: center;
@@ -176,6 +178,75 @@
        text-transform: capitalize;
        color: #F7F3F7;
        text-shadow: 4px 4px hsla(259, 44%, 55%, 0.4);
+   }
+
+   .editor-preview {
+       left: 50%;
+       top: 50%;
+       transform: translate(-50%, -50%);
+       position: fixed;
+       background: white;
+       width: 100vw;
+       height: 100vh;
+       z-index: 9;
+       display: flex;
+       justify-content: space-around;
+       align-items: center;
+       flex-direction: column;
+   }
+
+   .editor-preview-content {
+       overflow-y: scroll;
+       height: 50%;
+       width: 50%;
+       border-left: 1px #cfcfcf solid;
+       border-top: 1px #cfcfcf solid;
+       border-bottom: 1px #cfcfcf solid;
+       padding: 15px;
+       border-radius: 8px;
+       resize: none;
+       margin: 0;
+       vertical-align: bottom;
+   }
+
+   .editor-preview-title {
+       font-family: sans-serif;
+       font-weight: 900;
+       text-align: center;
+       font-size: 30pt;
+       margin-top: 0px;
+       margin-bottom: 0px;
+       text-transform: capitalize;
+       font-style: italic;
+       color: #6a5c6a;
+   }
+
+   .editor-preview-toolbox {
+       display: flex;
+       justify-content: space-around;
+       width: 40%;
+       font-size: 24pt;
+       color: #6a5c6a;
+   }
+
+   .editor-preview-tool .fa-refresh {
+       animation: spin 3000ms linear infinite;
+       -webkit-animation-play-state: paused;
+       -moz-animation-play-state: paused;
+       -o-animation-play-state: paused;
+       animation-play-state: paused;
+   }
+
+   .editor-preview-tool .fa-refresh:hover {
+       -webkit-animation-play-state: running;
+       -moz-animation-play-state: running;
+       -o-animation-play-state: running;
+       animation-play-state: running;
+   }
+
+   .editor-preview-tool:hover {
+       color: #633fab;
+       animation: animated 1500ms linear infinite;
    }
 
    .syntax-highlight {
@@ -256,9 +327,19 @@
            opacity: .5;
        }
    }
+
    @keyframes animatedBright {
-      50% {
-          filter: brightness(130%);
-          box-shadow: 0px 0px 80px hsla(259, 44%, 55%, 0.4);
-      }
+       50% {
+           filter: brightness(130%);
+           box-shadow: 0px 0px 80px hsla(259, 44%, 55%, 0.4);
+       }
+   }
+
+   @keyframes spin {
+       from {
+           transform: rotate(0deg);
+       }
+       to {
+           transform: rotate(360deg);
+       }
    }

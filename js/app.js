@@ -140,28 +140,28 @@
                 this.index++;
                 this.storage.content[this.index] = content;
                 this.storage.caret[this.index] = caret;
-                console.log('History Saved\n\nCaret Marker:');
-                console.log('%c' + this.storage.caret[this.index].rangeInfos[0].markerId, 'background: #222; color: #bada55;');
-                console.log('Matches . . . ?');
-                console.log(this.storage.content[this.index].match(this.storage.caret[this.index].rangeInfos[0].markerId));
+                // console.log('History Saved\n\nCaret Marker:');
+                // console.log('%c' + this.storage.caret[this.index].rangeInfos[0].markerId, 'background: #222; color: #bada55;');
+                // console.log('Matches . . . ?');
+                // console.log(this.storage.content[this.index].match(this.storage.caret[this.index].rangeInfos[0].markerId));
             },
             undo: function() {
                 if (this.index > 1) {
                     this.index--;
                     this.restore();
-                    console.log('History Undo\n\nCaret Marker:');
-                    console.log('%c' + this.storage.caret[this.index].rangeInfos[0].markerId, 'background: #222; color: #bada55;');
-                    console.log('Matches . . . ?');
-                    console.log(this.storage.content[this.index].match(this.storage.caret[this.index].rangeInfos[0].markerId));
+                    // console.log('History Undo\n\nCaret Marker:');
+                    // console.log('%c' + this.storage.caret[this.index].rangeInfos[0].markerId, 'background: #222; color: #bada55;');
+                    // console.log('Matches . . . ?');
+                    // console.log(this.storage.content[this.index].match(this.storage.caret[this.index].rangeInfos[0].markerId));
                 }
             },
             redo: function() {
                 if (this.index < this.storage.caret.length - 1) {
                     this.index++;
-                    console.log('History Redo\n\nCaret Marker:');
-                    console.log('%c' + this.storage.caret[this.index].rangeInfos[0].markerId, 'background: #222; color: #bada55;');
-                    console.log('Matches . . . ?');
-                    console.log(this.storage.content[this.index].match(this.storage.caret[this.index].rangeInfos[0].markerId));
+                    // console.log('History Redo\n\nCaret Marker:');
+                    // console.log('%c' + this.storage.caret[this.index].rangeInfos[0].markerId, 'background: #222; color: #bada55;');
+                    // console.log('Matches . . . ?');
+                    // console.log(this.storage.content[this.index].match(this.storage.caret[this.index].rangeInfos[0].markerId));
                     this.restore();
                 }
             }
@@ -193,7 +193,7 @@
             getCopy: function() {
 
             },
-            getPreview: function() {
+            getPreview: function(option) {
                 let spintaxText = Editor.elementNode.textContent;
                 let matches, options, random;
                 let regEx = new RegExp(/{([^{}]+?)}/);
@@ -202,8 +202,8 @@
                     random = Math.floor(Math.random() * options.length);
                     spintaxText = spintaxText.replace(matches[0], options[random]);
                 }
+
                 this.previewText = spintaxText;
-                console.log(spintaxText);
             },
             setHelp: function() {
 

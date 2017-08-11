@@ -111,7 +111,7 @@
         },
         history: {
             index: 0,
-            max: 10,
+            max: 9,
             storage: {
                 content: [ /*HTML CONTENT*/ ],
                 caret: [ /*CARET POSITION*/ ],
@@ -132,20 +132,23 @@
                 if (this.storage.content.length > this.max) {
                     this.clean();
                 }
+                this.index++;
                 this.storage.content[this.index] = content;
                 this.storage.caret[this.index] = caret;
-                this.index++;
             },
             undo: function() {
-                if (this.index > 0) {
+                if (this.index > 1) {
                     this.index--;
                     this.restore();
+                    console.log('undo')
+
                 }
             },
             redo: function() {
-                if (this.index < this.storage.content.length && this.index < this.max) {
+                if (this.index < this.storage.caret.length - 1) {
                     this.index++;
                     this.restore();
+                    console.log('redo')
                 }
             }
         },
@@ -228,7 +231,6 @@
                     Env.setStyle(Editor.elementNode.className, 'line-height', this.lineHeight + 'px', 'class');
                     Env.setStyle(Editor.elementNode.className, 'font-size', this.fontSizeAmt + '%', 'class');
                     Env.setStyle('syntax-highlight', 'font-size', this.fontSizeAmt + '% !important');
-
                 }
 
                 if (this.fontSizeIndex === 0) {
@@ -426,7 +428,7 @@
         }
     });
 
-    setEvent(document, 'dragstart, drop', (event) => {
+    setEvent(document, 'dragstart, drop, contextmenu', (event) => {
         event.preventDefault();
         event.stopPropagation();
         return false;
@@ -444,23 +446,20 @@
                 if (event.shiftKey === false && event.ctrlKey && event.key.toUpperCase() === 'Z') {
                     Editor.history.undo();
                     Editor.history.modifyKey = true;
-                    console.log('undo')
                 }
                 if (event.shiftKey === true && event.ctrlKey && event.key.toUpperCase() === 'Z') {
                     Editor.history.redo();
                     Editor.history.modifyKey = true;
-                    console.log('redo')
                 }
                 if (event.ctrlKey && event.key.toUpperCase() === 'Y') {
                     Editor.history.redo();
                     Editor.history.modifyKey = true;
-                    console.log('redo')
                 }
                 console.log('CTRL Key ' + Editor.history.ctrlKey);
                 console.log('MODIFIER Key ' + Editor.history.modifyKey);
             }
         }
-        
+
         if (Editor.history.modifyKey === true && Editor.history.ctrlKey === false) {
             Editor.history.modifyKey = false;
         } else if (Editor.history.modifyKey === false && Editor.history.ctrlKey === true) {
@@ -486,7 +485,9 @@
                     Editor.history.save(Editor.getClean(Editor.elementNode.innerHTML), caret)
                     rangy.removeMarkers(caret);
                     console.log('history added')
-                }, 400);
+                    console.log(Editor.history.index);
+                    console.log(Editor.history.storage);
+                }, 600);
             }
         }
 

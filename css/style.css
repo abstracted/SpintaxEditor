@@ -108,6 +108,7 @@
        color: #F7F3F7;
        background: #1B181B;
        transition: all 400ms ease;
+       word-break: break-all;
    }
 
    .editor-content:focus {

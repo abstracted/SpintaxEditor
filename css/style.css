@@ -99,15 +99,16 @@
        font-size: 14pt;
        overflow-y: scroll;
        overflow-x: hidden;
-       word-wrap: break-word;
-       overflow-wrap: break-word;
-       white-space: normal;
        line-height: 30px;
        min-height: 358px;
        height: 60%;
        color: #F7F3F7;
        background: #1B181B;
        transition: all 400ms ease;
+       overflow-wrap: break-word;
+/*       white-space: normal;
+*/       
+       word-wrap: break-word;
        word-break: break-all;
    }
 

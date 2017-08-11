@@ -48,6 +48,8 @@
             this.toolbox.init();
             this.setContent(event);
             this.elementNode.focus();
+            this.selection.setSelectAll();
+            this.selection.setCollapsed();
         },
         highlightRules: {
             simple: [],
@@ -95,6 +97,9 @@
                 rangy.init();
                 this.caretPos = null;
             },
+            setSelectAll: function() {
+                rangy.selectNodeContents(Editor.elementNode);
+            },
             setCollapsed: function() {
                 rangy.getSelection().collapseToEnd();
             },
@@ -111,14 +116,14 @@
         },
         history: {
             index: 0,
-            max: 9,
+            max: 39,
             storage: {
                 content: [ /*HTML CONTENT*/ ],
                 caret: [ /*CARET POSITION*/ ],
             },
             modifyKey: false,
             ctrlKey: false,
-            restore: function() {
+            restore: function() {        
                 Editor.elementNode.innerHTML = this.storage.content[this.index];
                 Editor.setContent();
                 Editor.selection.getCaret(this.storage.caret[this.index]);
@@ -135,20 +140,29 @@
                 this.index++;
                 this.storage.content[this.index] = content;
                 this.storage.caret[this.index] = caret;
+                console.log('History Saved\n\nCaret Marker:');
+                console.log('%c' + this.storage.caret[this.index].rangeInfos[0].markerId, 'background: #222; color: #bada55;');
+                console.log('Matches . . . ?');
+                console.log(this.storage.content[this.index].match(this.storage.caret[this.index].rangeInfos[0].markerId));
             },
             undo: function() {
                 if (this.index > 1) {
                     this.index--;
                     this.restore();
-                    console.log('undo')
-
+                    console.log('History Undo\n\nCaret Marker:');
+                    console.log('%c' + this.storage.caret[this.index].rangeInfos[0].markerId, 'background: #222; color: #bada55;');
+                    console.log('Matches . . . ?');
+                    console.log(this.storage.content[this.index].match(this.storage.caret[this.index].rangeInfos[0].markerId));
                 }
             },
             redo: function() {
                 if (this.index < this.storage.caret.length - 1) {
                     this.index++;
+                    console.log('History Redo\n\nCaret Marker:');
+                    console.log('%c' + this.storage.caret[this.index].rangeInfos[0].markerId, 'background: #222; color: #bada55;');
+                    console.log('Matches . . . ?');
+                    console.log(this.storage.content[this.index].match(this.storage.caret[this.index].rangeInfos[0].markerId));
                     this.restore();
-                    console.log('redo')
                 }
             }
         },
@@ -306,7 +320,6 @@
             clipboardEvent.preventDefault();
 
             this.setContent();
-
             this.selection.getCaret();
             this.selection.setCollapsed();
         },
@@ -398,6 +411,56 @@
         },
         getWordCount: function() {
 
+        },
+        keyDownHandler: function(event) {
+            if (event.ctrlKey) {
+                if (this.history.ctrlKey === false && this.history.modifyKey === false) {
+
+                    this.history.ctrlKey = true;
+
+                    if (event.shiftKey === false && event.ctrlKey && event.key.toUpperCase() === 'Z') {
+                        this.history.undo();
+                        this.history.modifyKey = true;
+                    }
+                    if (event.shiftKey === true && event.ctrlKey && event.key.toUpperCase() === 'Z') {
+                        this.history.redo();
+                        this.history.modifyKey = true;
+                    }
+                    if (event.ctrlKey && event.key.toUpperCase() === 'Y') {
+                        this.history.redo();
+                        this.history.modifyKey = true;
+                    }
+                }
+            }
+
+            if (this.history.modifyKey === true && this.history.ctrlKey === false) {
+                this.history.modifyKey = false;
+            } else if (this.history.modifyKey === false && this.history.ctrlKey === true) {
+                this.history.ctrlKey = false;
+            }
+        },
+        keyupHandler: function(event) {
+            if (event.key.toUpperCase() !== 'CONTROL') {
+                if (this.history.ctrlKey === false && this.history.modifyKey === false) {
+
+                    this.selection.setCaret();
+
+                    this.setContent();
+
+                    this.selection.getCaret();
+
+                    clearTimeout(this.timeout);
+                    this.timeout = setTimeout(() => {
+                        let caret = rangy.saveSelection();
+                        this.history.save(this.getClean(this.elementNode.innerHTML), caret)
+                        rangy.removeMarkers(caret);
+
+                    }, 600);
+                }
+            }
+
+            this.history.ctrlKey = false;
+            this.history.modifyKey = false;
         }
     };
 
@@ -410,6 +473,17 @@
             element.addEventListener(event[i], func);
         }
     }
+
+    setEvent(document, 'dragstart, drop, contextmenu', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        return false;
+    });
+
+    setEvent(document, 'copy, cut, paste', (event) => {
+        Editor.clipboard(event);
+    });
 
     setEvent(window, 'load, resize', (event) => {
         switch (event.type) {
@@ -428,72 +502,12 @@
         }
     });
 
-    setEvent(document, 'dragstart, drop, contextmenu', (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        return false;
-    });
-
-    setEvent(document, 'copy, cut, paste', (event) => {
-        Editor.clipboard(event);
-    });
-
     setEvent(document, 'keydown', (event) => {
-        if (event.ctrlKey) {
-            if (Editor.history.ctrlKey === false && Editor.history.modifyKey === false) {
-                console.log(event.type + ' ' + event.key)
-                Editor.history.ctrlKey = true;
-                if (event.shiftKey === false && event.ctrlKey && event.key.toUpperCase() === 'Z') {
-                    Editor.history.undo();
-                    Editor.history.modifyKey = true;
-                }
-                if (event.shiftKey === true && event.ctrlKey && event.key.toUpperCase() === 'Z') {
-                    Editor.history.redo();
-                    Editor.history.modifyKey = true;
-                }
-                if (event.ctrlKey && event.key.toUpperCase() === 'Y') {
-                    Editor.history.redo();
-                    Editor.history.modifyKey = true;
-                }
-                console.log('CTRL Key ' + Editor.history.ctrlKey);
-                console.log('MODIFIER Key ' + Editor.history.modifyKey);
-            }
-        }
-
-        if (Editor.history.modifyKey === true && Editor.history.ctrlKey === false) {
-            Editor.history.modifyKey = false;
-        } else if (Editor.history.modifyKey === false && Editor.history.ctrlKey === true) {
-            Editor.history.ctrlKey = false;
-        }
-
+        Editor.keyDownHandler(event);
     });
 
     setEvent(document, 'keyup', (event) => {
-        if (event.key.toUpperCase() !== 'CONTROL') {
-            if (Editor.history.ctrlKey === false && Editor.history.modifyKey === false) {
-                console.log(event.type + ' ' + event.key);
-
-                Editor.selection.setCaret();
-
-                Editor.setContent();
-
-                Editor.selection.getCaret();
-
-                clearTimeout(Editor.timeout);
-                Editor.timeout = setTimeout(() => {
-                    let caret = rangy.saveSelection();
-                    Editor.history.save(Editor.getClean(Editor.elementNode.innerHTML), caret)
-                    rangy.removeMarkers(caret);
-                    console.log('history added')
-                    console.log(Editor.history.index);
-                    console.log(Editor.history.storage);
-                }, 600);
-            }
-        }
-
-        Editor.history.ctrlKey = false;
-        Editor.history.modifyKey = false;
-
+        Editor.keyupHandler(event);
     });
 
     setEvent(document, 'click', (event) => {

@@ -116,8 +116,11 @@
                 content: [ /*HTML CONTENT*/ ],
                 caret: [ /*CARET POSITION*/ ],
             },
+            modifyKey: false,
+            ctrlKey: false,
             restore: function() {
                 Editor.elementNode.innerHTML = this.storage.content[this.index];
+                Editor.setContent();
                 Editor.selection.getCaret(this.storage.caret[this.index]);
             },
             clean: function() {
@@ -129,27 +132,18 @@
                 if (this.storage.content.length > this.max) {
                     this.clean();
                 }
-
                 this.storage.content[this.index] = content;
                 this.storage.caret[this.index] = caret;
-
                 this.index++;
-
-                console.log('UPDATE HISTORY Fired')
-                console.log(this.storage);
-                console.log('History Index ' + this.index)
-
             },
             undo: function() {
                 if (this.index > 0) {
-                    console.log('UNDO Fired')
                     this.index--;
                     this.restore();
                 }
             },
             redo: function() {
                 if (this.index < this.storage.content.length && this.index < this.max) {
-                    console.log('REDO Fired')
                     this.index++;
                     this.restore();
                 }
@@ -443,45 +437,61 @@
     });
 
     setEvent(document, 'keydown', (event) => {
-
-        // console.log(event.type + ' fired');
-
-        if (event.shiftKey === false && event.ctrlKey && event.key.toUpperCase() === 'Z') {
-            Editor.history.undo();
+        if (event.ctrlKey) {
+            if (Editor.history.ctrlKey === false && Editor.history.modifyKey === false) {
+                console.log(event.type + ' ' + event.key)
+                Editor.history.ctrlKey = true;
+                if (event.shiftKey === false && event.ctrlKey && event.key.toUpperCase() === 'Z') {
+                    Editor.history.undo();
+                    Editor.history.modifyKey = true;
+                    console.log('undo')
+                }
+                if (event.shiftKey === true && event.ctrlKey && event.key.toUpperCase() === 'Z') {
+                    Editor.history.redo();
+                    Editor.history.modifyKey = true;
+                    console.log('redo')
+                }
+                if (event.ctrlKey && event.key.toUpperCase() === 'Y') {
+                    Editor.history.redo();
+                    Editor.history.modifyKey = true;
+                    console.log('redo')
+                }
+                console.log('CTRL Key ' + Editor.history.ctrlKey);
+                console.log('MODIFIER Key ' + Editor.history.modifyKey);
+            }
         }
-        if (event.shiftKey === true && event.ctrlKey && event.key.toUpperCase() === 'Z') {
-            Editor.history.redo();
-        }
-        if (event.ctrlKey && event.key.toUpperCase() === 'Y') {
-            Editor.history.redo();
+        
+        if (Editor.history.modifyKey === true && Editor.history.ctrlKey === false) {
+            Editor.history.modifyKey = false;
+        } else if (Editor.history.modifyKey === false && Editor.history.ctrlKey === true) {
+            Editor.history.ctrlKey = false;
         }
 
     });
 
     setEvent(document, 'keyup', (event) => {
+        if (event.key.toUpperCase() !== 'CONTROL') {
+            if (Editor.history.ctrlKey === false && Editor.history.modifyKey === false) {
+                console.log(event.type + ' ' + event.key);
 
-        // If the control key was held down OR 
-        // ( If the control key was held && if the Keyup more than once)
-        //
-        // We don't want 
-        //      The history object to be saved / updated
-        //      New carets to be saved or restored on
-        // 
+                Editor.selection.setCaret();
 
-        // console.log(event.type + ' fired');
+                Editor.setContent();
 
-        // Editor.selection.setCaret();
+                Editor.selection.getCaret();
 
-        // Editor.setContent();
+                clearTimeout(Editor.timeout);
+                Editor.timeout = setTimeout(() => {
+                    let caret = rangy.saveSelection();
+                    Editor.history.save(Editor.getClean(Editor.elementNode.innerHTML), caret)
+                    rangy.removeMarkers(caret);
+                    console.log('history added')
+                }, 400);
+            }
+        }
 
-        // Editor.selection.getCaret();
-
-        clearTimeout(Editor.timeout);
-        Editor.timeout = setTimeout(() => {
-            let caret = rangy.saveSelection();
-            Editor.history.save(Editor.getClean(Editor.elementNode.innerHTML), caret)
-            rangy.removeMarkers(caret);
-        }, 400);
+        Editor.history.ctrlKey = false;
+        Editor.history.modifyKey = false;
 
     });
 
@@ -568,13 +578,10 @@
         
         - General Charcters: Just matches words
             - [\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]
-
         - General Characters with HTML tags: matches words and html, should only be used for word spins
             - [\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]
-
         - General Characters, With Vert and Right Curly: For begin of para spins
             - [\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]
-
         - General Characters, With Vert and Left Curly: For end of para spins
             - [\|\{\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]
         
@@ -584,5 +591,4 @@
         - Mixed, matches the cursor position and general characters
             - ([\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*(<span\s+id="[a-zA-Z]+\_\d+\_\d+"\s+class="[a-zA-Z]+"\s+style="[a-zA-Z\-\:\;\d\s">\.]+\W<\/span>){0,1}[\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*)
             
-
 -------------------------------------------------------------------------------------*/

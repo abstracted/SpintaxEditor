@@ -8,35 +8,46 @@
 
 <body class="env-body">
     <main>
-        <div class="editor-preview" id="editorPreviewWindow">
-            <h1 class="editor-preview-title">{Spintax Preview}</h1>
-            <textarea class="editor-preview-content" id="editorPreviewContent" name="editor-preview-content">Test</textarea>
-            <div class="editor-preview-toolbox">
-                <div class="editor-preview-tool" id="editorGenerate"><i class="fa fa-refresh" aria-hidden="true"></i>
-                </div>
-                <div class="editor-preview-tool" id="editorClose"><i class="fa fa-times-circle" aria-hidden="true"></i>
+        <div class="editor-overlay-container">
+            <div class="editor-toolbox no-select glowing-edge" id="editorToolbox">
+                <h3 class="editor-toolbox-title title-box">toolbox</h3>
+                <div class="editor-tool" id="editorSimple">simple mode</div>
+                <div class="editor-tool" id="editorPreview">preview spin</div>
+                <div class="editor-tool" id="editorKeyword">seo keyword</div>
+                <div class="editor-tool" id="editorExtend">extend editor</div>
+                <div class="editor-tool" id="editorPlus">increase font</div>
+                <div class="editor-tool" id="editorMinus">decrease font</div>
+                <div class="editor-tool" id="editorColor">change color</div>
+                <div class="editor-tool" id="editorInvert">invert color</div>
+            </div>
+            <div class="editor-container">
+                <div class="editor-border glowing-edge" id="editorBorder">
+                    <h3 class="editor-title title-box no-select">./Spintax_editor</h3>
+                    <div class="editor-content text-area" id="editorContent" contentEditable="true">Sample sentence: {{A|The|One} {quick|magnificent|charming|lucky|fast|super|cool} {gold|tan|yellow|white|brown|silver} {beaver|packrat|cat|lion|tiger|fox|dog|wolf} {consumed|ate|pilfered} my {pastry|streudel|cake}.} {{Start|Begin|Continue with} a {new|another|the next} {sentence|statement|dialog} and {make|create|generate|render} {an interesting|a developed|a unique} paragraph!}</div>
+                    <div class="info-box no-select">
+                        <div class="info">Tag Errors: <span id="editorTagErrors" class="info-result info-tags"> nothing yet</span></div>
+                        <div class="info">Word Count: <span id="editorWordCount" class="info-result info-words"> nothing yet</span></div>
+                        <div class="info">Keyword Weight: <span id="editorKeyWordWeight" class="info-result info-words"> nothing yet</span></div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="editor-toolbox" id="editorToolbox">
-            <h3 class="editor-toolbox-title">Toolbox</h3>
-            <!-- <div class="editor-tool" id="editorHelp">help mode</div> -->
-            <div class="editor-tool" id="editorColor">change color</div>
-            <div class="editor-tool" id="editorInvert">invert color</div>
-            <div class="editor-tool" id="editorPlus">increase font</div>
-            <div class="editor-tool" id="editorMinus">decrease font</div>
-            <div class="editor-tool" id="editorExtend">extend editor</div>
-            <!-- <div class="editor-tool" id="editorCopy">copy text</div> -->
-            <div class="editor-tool" id="editorPreview">preview spin</div>
-            <div class="editor-tool" id="editorSimple">simple mode</div>
+        <div class="editor-preview-container overlay" id="editorPreviewWindow">
+            <div class="editor-preview-border glowing-edge" id="editorPreviewBorder">
+                <h3 class="editor-title title-box no-select">./Spintax_preview</h3>
+                <textarea class="editor-preview-content text-area" id="editorPreviewContent" name="editor-preview-content"></textarea>
+                <div class="info-box no-select">
+                    <div class="info info-preview" id="editorPreviewGenerate"><i class="fa fa-refresh editor-preview-spin-icon" aria-hidden="true"></i> Respin text</div>
+                    <div class="info info-preview" id="editorPreviewClose"><i class="fa fa-times-circle" aria-hidden="true"></i> Close preview</div>
+                </div>
+            </div>
         </div>
-        <div class="editor-container">
-            <h1 class="editor-title">{Spintax editor}</h1>
-            <div class="editor-border" id="editorBorder">
-                <div class="editor-content" id="editorContent" contentEditable="true">Sample sentence: {{A|The|One} {quick|magnificent|charming|lucky|fast|super|cool} {gold|tan|yellow|white|brown|silver} {beaver|packrat|cat|lion|tiger|fox|dog|wolf} {consumed|ate|pilfered} my {pastry|streudel|cake}.} {{Start|Begin|Continue with} a {new|another|the next} {sentence|statement|dialog} and {make|create|generate|render} {an interesting|a developed|a unique} paragraph!}</div>
-                <div class="editor-infobox">
-                    <div class="editor-info">Unclosed Tags: <span id="editorTagErrors" class="editor-info-result editor-info-tags">nothing to report</span></div>
-                    <div class="editor-info">Approx Word Count: <span id="editorWordCount" class="editor-info-result editor-info-words">nothing to report</span></div>
+        <div class="editor-keyword-container overlay" id="editorKeywordWindow">
+            <div class="editor-keyword-border glowing-edge" id="editorKeywordBorder">
+                <h3 class="editor-title title-box no-select">./Spintax_keyword</h3>
+                <textarea class="editor-keyword-content text-area" id="editorKeywordContent" name="editor-keyword-content" placeholder="Enter your SEO keyword here."></textarea>
+                <div class="info-box no-select">
+                    <div class="info info-keyword" id="editorKeywordSave"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save & Close</div>
                 </div>
             </div>
         </div>

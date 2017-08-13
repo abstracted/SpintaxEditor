@@ -33,11 +33,9 @@
         init: function(event) {
             this.elementNode = document.getElementById('editorContent');
             this.borderNode = document.getElementById("editorBorder");
+            this.containerNode = document.querySelector('.editor-container');
             this.wordCount = document.getElementById('editorWordCount');
             this.tagErrors = document.getElementById('editorTagErrors');
-
-            this.containerNode = document.querySelector('.editor-container');
-            this.titleNode = document.querySelector('.editor-title');
 
             this.timeout = null;
 
@@ -52,7 +50,31 @@
             this.selection.setCollapsed();
         },
         highlightRules: {
-            simple: [],
+            simple: [
+                [true, 'before', 'curly-left-sentence', /(^([\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*))(\{)/, 'gm', '$1', '', '$4'],
+
+                [true, 'before', 'curly-left-sentence', /(<div>([\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*))(\{)/, 'g', '$1', '', '$4'],
+
+                [false, '', 'curly-right-sentence', /(\})(?!.*\})/, 'gm', '', '', '$1'],
+
+                [true, 'after', 'curly-right-sentence', /(\})(?!<\/strong>)(([\|\{\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\|\{\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*)<\/div>)/, 'g', '', '$2', '$1'],
+
+                [true, 'after', 'curly-right-sentence', /(\})(?!<\/strong>)(([\|\{\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\|\{\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*)<div>)/, 'g', '', '$2', '$1'],
+
+                [true, 'before', 'curly-left-right-sentence', /([\.\?\!]{1})((<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}\}(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}(\s|&nbsp;){1}(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}\{)/, 'g', '$1', '', '$2'],
+
+                [true, 'before', 'vert-sentence', /(\}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*[\?\.\!]{1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*)(\|)(?=[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*\{)/, 'g', '$1', '', '$4'],
+
+                [true, 'before', 'words-wordspin', /(\{|\|)([\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*)(?=\||\})/, 'g', '$1', '', '$2'],
+
+                [true, 'before', 'words-wordspin', /(\}|\|)([\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*)(?=\}|\|)/, 'g', '$1', '', '$2'],
+
+                [true, 'before', 'words-wordspin', /(\{|\|)([\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*)(?=\{|\|)/, 'g', '$1', '', '$2'],
+                [false, '', 'curly-left-wordspin', /(\{)(?!<\/strong>)/, 'g', '', '', '$1'],
+                [false, '', 'curly-right-wordspin', /(\})(?!((<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}(\s|&nbsp;){1}(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/spasn>){0,1}\{){0,1}(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}<\/strong>)/, 'g', '', '', '$1'],
+                [false, '', 'vert-wordspin', /(\|)(?!<\/strong>)/, 'g', '', '', '$1'],
+                [false, '', 'shortcode', /(\[[\s\w\=\-]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\s\w\=\-]*\])/, 'g', '', '', '$1'],
+            ],
             advanced: [
                 [true, 'before', 'curly-left-sentence', /(^([\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*))(\{)/, 'gm', '$1', '', '$4'],
 
@@ -140,28 +162,16 @@
                 this.index++;
                 this.storage.content[this.index] = content;
                 this.storage.caret[this.index] = caret;
-                // console.log('History Saved\n\nCaret Marker:');
-                // console.log('%c' + this.storage.caret[this.index].rangeInfos[0].markerId, 'background: #222; color: #bada55;');
-                // console.log('Matches . . . ?');
-                // console.log(this.storage.content[this.index].match(this.storage.caret[this.index].rangeInfos[0].markerId));
             },
             undo: function() {
                 if (this.index > 1) {
                     this.index--;
                     this.restore();
-                    // console.log('History Undo\n\nCaret Marker:');
-                    // console.log('%c' + this.storage.caret[this.index].rangeInfos[0].markerId, 'background: #222; color: #bada55;');
-                    // console.log('Matches . . . ?');
-                    // console.log(this.storage.content[this.index].match(this.storage.caret[this.index].rangeInfos[0].markerId));
                 }
             },
             redo: function() {
                 if (this.index < this.storage.caret.length - 1) {
                     this.index++;
-                    // console.log('History Redo\n\nCaret Marker:');
-                    // console.log('%c' + this.storage.caret[this.index].rangeInfos[0].markerId, 'background: #222; color: #bada55;');
-                    // console.log('Matches . . . ?');
-                    // console.log(this.storage.content[this.index].match(this.storage.caret[this.index].rangeInfos[0].markerId));
                     this.restore();
                 }
             }
@@ -169,34 +179,88 @@
         toolbox: {
             init: function() {
                 this.elementNode = document.getElementById('editorToolbox');
-
                 this.colorButton = document.getElementById('editorColor');
                 this.copyButton = document.getElementById('editorCopy');
                 this.extendButton = document.getElementById('editorExtend');
-                this.helpButton = document.getElementById('editorHelp');
                 this.invertButton = document.getElementById('editorInvert');
                 this.minusButton = document.getElementById('editorMinus');
                 this.plusButton = document.getElementById('editorPlus');
                 this.previewButton = document.getElementById('editorPreview');
+                this.keywordButton = document.getElementById('editorKeyword');
                 this.simpleButton = document.getElementById('editorSimple');
 
+                this.previewContainer = document.getElementById('editorPreviewWindow');
+                this.previewBorder = document.getElementById('editorPreviewBorder');
+                this.previewNode = document.getElementById('editorPreviewContent');
+                this.previewGenerate = document.getElementById('editorPreviewGenerate');
+
+                this.keywordContainer = document.getElementById('editorKeywordWindow');
+                this.keywordBorder = document.getElementById('editorKeywordBorder');
+                this.keywordNode = document.getElementById('editorKeywordContent');
+                this.keywordSaveButton = document.getElementById('editorKeywordSave');
+
+                this.invertMode = false;
                 this.colorRotateIndex = 0;
                 this.extendMode = false;
-                this.fontSizeAmt = 125;
+
+                this.lineHeight = 30;
                 this.fontSizeIndex = 8;
                 this.fontSizeMax = this.fontSizeIndex * 2;
-                this.invertMode = false;
-                this.lineHeight = 30;
-                this.previewActive = false;
+                this.fontSizeChangeAmt = 0.5;
+                this.fontSizeTextArea = 14;
+                this.fontSizeSyntaxDefault = 16;
+                this.fontSizeSyntaxWords = 14;
+                this.fontSizeSyntaxShortCode = 13;
+
                 this.previewText = '';
+                this.keywordText = '';
+
             },
-            getCopy: function() {
+            getPopUp: function(popupContainerClassName, buttonNode, popUpborderNode) {
+
+                Env.setStyle(popupContainerClassName, 'display', 'flex');
+
+                buttonNode.classList.add('disabled');
+                popUpborderNode.classList.add('bounce-in');
+                popUpborderNode.classList.remove('bounce-out');
+
+                Env.setStyle('editor-overlay-container', 'filter', 'grayscale(70%) blur(3px)');
+                Env.setStyle('editor-overlay-container', 'transform', 'scale(.85) perspective(950px) rotateY(5deg)');
+
+                Env.setStyle('.env-root', 'overflow-y', 'hidden', 'class');
+
+                // This looks a little nicer but its bad UX
+                // if (this.extendMode === true) {
+                //     this.setExtend();
+                // }
+
+            },
+            getPopOut: function(popupContainerClassName, buttonNode, popUpborderNode) {
+                setTimeout(() => {
+                    Env.setStyle(popupContainerClassName, 'display', 'none');
+
+                    Env.setStyle('.env-root', 'overflow-y', 'auto', 'class');
+
+                    buttonNode.classList.remove('disabled');
+
+                    Env.setStyle('editor-overlay-container', 'transform', 'none');
+
+                }, 500);
+
+                popUpborderNode.classList.add('bounce-out');
+
+                popUpborderNode.classList.remove('bounce-in');
+
+                Env.setStyle('editor-overlay-container', 'filter', 'grayscale(0%) blur(0px)');
+
+                Env.setStyle('editor-overlay-container', 'transform', 'scale(1) perspective(0) rotateY(0deg)');
 
             },
             getPreview: function(option) {
                 let spintaxText = Editor.elementNode.textContent;
                 let matches, options, random;
                 let regEx = new RegExp(/{([^{}]+?)}/);
+
                 while ((matches = regEx.exec(spintaxText)) !== null) {
                     options = matches[1].split("|");
                     random = Math.floor(Math.random() * options.length);
@@ -204,12 +268,40 @@
                 }
 
                 this.previewText = spintaxText;
+
+
+                if (option === 'open') {
+                    this.getPopUp('editor-preview-container', this.previewButton, this.previewBorder);
+                }
+                if (option === 'close') {
+                    this.getPopOut('editor-preview-container', this.previewButton, this.previewBorder);
+                } else {
+                    this.previewNode.innerHTML = this.previewText;
+                }
+
             },
-            setHelp: function() {
+            getKeyword: function(option) {
+
+                if (option === 'open') {
+                    this.getPopUp('editor-keyword-container', this.keywordButton, this.keywordBorder);
+                }
+                if (option === 'close') {
+                    this.getPopOut('editor-keyword-container', this.keywordButton, this.keywordBorder);
+                    if (this.keywordNode.value) {
+                        this.keywordText = this.keywordNode.value;
+                    }
+                }
 
             },
             setSimple: function() {
-
+                if (Editor.highlightMode !== 'simple') {
+                    Editor.highlightMode = 'simple';
+                    this.simpleButton.classList.add('disabled');
+                } else {
+                    Editor.highlightMode = 'advanced';
+                    this.simpleButton.classList.remove('disabled');
+                }
+                Editor.setContent();
             },
             setColor: function() {
                 this.colorRotateIndex += 20;
@@ -219,23 +311,29 @@
                 if (this.invertMode === false) {
                     this.invertButton.classList.add('disabled');
                     Env.setStyle(Env.bodyNode.className, 'filter', 'invert(100%) hue-rotate(180deg) brightness(90%) contrast(130%)', 'class');
+                    Env.setStyle('.syntax-highlight', 'filter', 'brightness(200%) saturate(5) contrast(150%) hue-rotate(-35deg)', 'class');
                     this.invertMode = true;
                 } else {
                     this.invertButton.classList.remove('disabled');
                     Env.setStyle(Env.bodyNode.className, 'filter', 'invert(0%) hue-rotate(0deg) brightness(100%) contrast(100%)', 'class');
+                    Env.setStyle('.syntax-highlight', 'filter', 'brightness(100%) saturate(1) contrast(100%) hue-rotate(0deg)', 'class');
                     this.invertMode = false;
                 }
             },
             setPlus: function() {
                 if (this.fontSizeIndex < this.fontSizeMax) {
+
                     this.lineHeight += 1.2;
-                    this.fontSizeAmt += 5;
+                    this.fontSizeTextArea += this.fontSizeChangeAmt;
+                    this.fontSizeSyntaxDefault += this.fontSizeChangeAmt;
+                    this.fontSizeSyntaxWords += this.fontSizeChangeAmt;
+                    this.fontSizeSyntaxShortCode += this.fontSizeChangeAmt;
                     this.fontSizeIndex++;
-
-                    Env.setStyle(Editor.elementNode.className, 'line-height', this.lineHeight + 'px', 'class');
-                    Env.setStyle(Editor.elementNode.className, 'font-size', this.fontSizeAmt + '%', 'class');
-                    Env.setStyle('syntax-highlight', 'font-size', this.fontSizeAmt + '% !important');
-
+                    Env.setStyle('.editor-content', 'line-height', this.lineHeight + 'px', 'class');
+                    Env.setStyle('.editor-content', 'font-size', this.fontSizeTextArea + 'pt', 'class');
+                    Env.setStyle('.syntax-highlight', 'font-size', this.fontSizeSyntaxDefault + 'pt', 'class');
+                    Env.setStyle('.syntax-highlight-words-wordspin', 'font-size', this.fontSizeSyntaxWords + 'pt', 'class');
+                    Env.setStyle('.syntax-highlight-shortcode', 'font-size', this.fontSizeSyntaxShortCode + 'pt', 'class');
                 }
 
                 if (this.fontSizeIndex === this.fontSizeMax) {
@@ -249,13 +347,18 @@
             },
             setMinus: function() {
                 if (this.fontSizeIndex > 0) {
-                    this.lineHeight -= 1.2;
-                    this.fontSizeAmt -= 5;
-                    this.fontSizeIndex--;
 
-                    Env.setStyle(Editor.elementNode.className, 'line-height', this.lineHeight + 'px', 'class');
-                    Env.setStyle(Editor.elementNode.className, 'font-size', this.fontSizeAmt + '%', 'class');
-                    Env.setStyle('syntax-highlight', 'font-size', this.fontSizeAmt + '% !important');
+                    this.lineHeight -= 1.2;
+                    this.fontSizeTextArea -= this.fontSizeChangeAmt;
+                    this.fontSizeSyntaxDefault -= this.fontSizeChangeAmt;
+                    this.fontSizeSyntaxWords -= this.fontSizeChangeAmt;
+                    this.fontSizeSyntaxShortCode -= this.fontSizeChangeAmt;
+                    this.fontSizeIndex--;
+                    Env.setStyle('.editor-content', 'line-height', this.lineHeight + 'px', 'class');
+                    Env.setStyle('.editor-content', 'font-size', this.fontSizeTextArea + 'pt', 'class');
+                    Env.setStyle('.syntax-highlight', 'font-size', this.fontSizeSyntaxDefault + 'pt', 'class');
+                    Env.setStyle('.syntax-highlight-words-wordspin', 'font-size', this.fontSizeSyntaxWords + 'pt', 'class');
+                    Env.setStyle('.syntax-highlight-shortcode', 'font-size', this.fontSizeSyntaxShortCode + 'pt', 'class');
                 }
 
                 if (this.fontSizeIndex === 0) {
@@ -273,13 +376,11 @@
                     this.extendButton.classList.add('disabled');
 
                     Env.setStyle(Editor.elementNode.className, 'overflow-y', 'hidden', 'class');
-                    // This stopped working for some reason 
-                    // Env.setStyle(Editor.elementNode.className, 'height', 'auto', 'class');
+
                     Editor.elementNode.style.height = 'auto';
 
 
                     Env.setStyle(Editor.containerNode.className, 'padding', '3% 1% 4.5%', 'class');
-                    Env.setStyle(Editor.titleNode.className, 'display', 'none', 'class');
 
                     this.elementNode.style.top = Editor.borderNode.getBoundingClientRect().top;
 
@@ -289,12 +390,9 @@
                     this.extendButton.classList.remove('disabled');
 
                     Env.setStyle(Editor.elementNode.className, 'overflow-y', 'scroll', 'class');
-                    // This stopped working for some reason 
-                    // Env.setStyle(Editor.elementNode.className, 'height', '60%');
                     Editor.elementNode.style.height = '60%';
 
                     Env.setStyle(Editor.containerNode.className, 'padding', '3% 5% 4.5%', 'class');
-                    Env.setStyle(Editor.titleNode.className, 'display', 'block', 'class');
 
                     this.elementNode.style.top = Editor.borderNode.getBoundingClientRect().top;
 
@@ -415,17 +513,69 @@
         },
         getResize: function() {
             if (this.toolbox.extendMode === false) {
-                this.toolbox.elementNode.style.top = this.elementNode.getBoundingClientRect().top;
+                this.toolbox.elementNode.style.top = this.borderNode.getBoundingClientRect().top;
             }
         },
-        getTagErrors: function(classNameOne, classNameTwo) {
+        getTagErrors: function() {
 
-            let classOneAmt = document.getElementsByClassName(classNameOne).length;
-            let classTwoAmt = document.getElementsByClassName(classNameTwo).length;
+            let classOneList = [
+                '.syntax-highlight-curly-left-sentence',
+                '.syntax-highlight-curly-left-wordspin'
+            ];
 
-            return ((classOneAmt / classTwoAmt) !== 1 && ((classOneAmt + classTwoAmt) % 2) !== 0);
+            let classTwoList = [
+                '.syntax-highlight-curly-right-sentence',
+                '.syntax-highlight-curly-right-wordspin'
+            ];
+
+            let classOneAmt = 0;
+            let classTwoAmt = 0;
+            let errorAmt = 0;
+
+
+            for (var i = classOneList.length - 1; i >= 0; i--) {
+                if (document.querySelectorAll(classOneList[i])) {
+                    classOneAmt += document.querySelectorAll(classOneList[i]).length;
+                }
+            }
+
+            for (var i = classTwoList.length - 1; i >= 0; i--) {
+                if (document.querySelectorAll(classTwoList[i])) {
+                    classTwoAmt += document.querySelectorAll(classTwoList[i]).length;
+                }
+            }
+
+            if (classOneAmt !== classTwoAmt) {
+                if (classOneAmt > classTwoAmt) {
+                    errorAmt += (classOneAmt - classTwoAmt);
+                } else {
+                    errorAmt += (classTwoAmt - classOneAmt);
+                }
+            }
+
+            if (document.querySelectorAll('.syntax-highlight-error')) {
+                errorAmt += document.querySelectorAll('.syntax-highlight-error').length;
+            }
+            if (errorAmt !== 0) {
+                this.tagErrors.innerHTML = errorAmt + ' errors*';
+            } else {
+                this.tagErrors.innerHTML = 'nothing yet';
+            }
+
         },
         getWordCount: function() {
+            this.toolbox.getPreview();
+
+            let wc = this.toolbox.previewNode.textContent.replace(/\s{2,}/g).match(/\w+/g);
+
+            if (wc !== null) {
+                this.wordCount.innerHTML = wc.length + ' words*';
+            } else {
+                this.wordCount.innerHTML = 'nothing yet';
+            }
+
+        },
+        getKeywordWeight: function() {
 
         },
         keyDownHandler: function(event) {
@@ -471,6 +621,9 @@
                         this.history.save(this.getClean(this.elementNode.innerHTML), caret)
                         rangy.removeMarkers(caret);
 
+                        this.getTagErrors();
+                        this.getWordCount();
+
                     }, 600);
                 }
             }
@@ -482,84 +635,107 @@
 
     /*---------------------------------------------------------------------------------*/
 
-    function addEvents(element, eventList, func) {
-        let event = eventList.split(', ');
+    window.addEventListener('load', (event) => {
 
-        for (let i = 0; i < event.length; i++) {
-            element.addEventListener(event[i], func);
+        Env.init();
+
+        Editor.init(event);
+
+        Editor.getResize();
+
+        clearTimeout(Editor.timeout);
+
+        Editor.timeout = setTimeout(() => {
+            let caret = rangy.saveSelection();
+            Editor.history.save(Editor.getClean(Editor.elementNode.innerHTML), caret)
+            rangy.removeMarkers(caret);
+        }, 400);
+
+        function addEvents(element, eventList, func) {
+            let event = eventList.split(', ');
+
+            for (let i = 0; i < event.length; i++) {
+                element.addEventListener(event[i], func);
+            }
         }
-    }
 
-    addEvents(document, 'dragstart, drop', (event) => {
-        event.preventDefault();
-        event.stopPropagation();
+        addEvents(document, 'dragstart, drop', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
 
-        return false;
-    });
+            return false;
+        });
 
-    addEvents(document, 'copy, cut, paste', (event) => {
-        Editor.clipboard(event);
-    });
+        addEvents(document, 'copy, cut, paste', (event) => {
+            Editor.clipboard(event);
+        });
 
-    addEvents(window, 'load, resize', (event) => {
-        switch (event.type) {
-            case 'load':
-                Env.init();
-                Editor.init(event);
-                clearTimeout(Editor.timeout);
-                Editor.timeout = setTimeout(() => {
-                    let caret = rangy.saveSelection();
-                    Editor.history.save(Editor.getClean(Editor.elementNode.innerHTML), caret)
-                    rangy.removeMarkers(caret);
-                }, 400);
-            default:
-                Editor.getResize();
-                break;
-        }
-    });
+        window.addEventListener('resize', (event) => {
+            Editor.getResize();
+        });
 
-    addEvents(document, 'keydown', (event) => {
-        Editor.keyDownHandler(event);
-    });
+        document.addEventListener('keydown', (event) => {
+            if (event.target.getAttribute('id') === Editor.elementNode.getAttribute('id')) {
+                Editor.keyDownHandler(event);
+            }
+        });
 
-    addEvents(document, 'keyup', (event) => {
-        Editor.keyupHandler(event);
-    });
+        document.addEventListener('keyup', (event) => {
+            if (event.target.getAttribute('id') === Editor.elementNode.getAttribute('id')) {
+                Editor.keyupHandler(event);
+            }
+        });
 
-    addEvents(document, 'click', (event) => {
-        switch (event.target.getAttribute("id")) {
-            case 'editorHelp':
+        document.addEventListener('click', (event) => {
+            switch (event.target.getAttribute("id")) {
+                case 'editorColor':
+                    Editor.toolbox.setColor();
+                    break;
+                case 'editorInvert':
+                    Editor.toolbox.setInvert();
+                    break;
+                case 'editorPlus':
+                    Editor.toolbox.setPlus();
+                    break;
+                case 'editorMinus':
+                    Editor.toolbox.setMinus();
+                    break;
+                case 'editorExtend':
+                    Editor.toolbox.setExtend();
+                    break;
+                case 'editorPreview':
+                    Editor.toolbox.getPreview('open');
+                    break;
+                case 'editorPreviewClose':
+                    Editor.toolbox.getPreview('close');
+                    break;
+                case 'editorPreviewGenerate':
+                    Editor.toolbox.getPreview();
+                    break;
+                case 'editorKeyword':
+                    Editor.toolbox.getKeyword('open');
+                    break;
+                case 'editorKeywordSave':
+                    Editor.toolbox.getKeyword('close');
+                    break;
+                case 'editorSimple':
+                    Editor.toolbox.setSimple();
+                    break;
+                default:
+                    event.preventDefault();
+                    event.stopPropagation();
+                    break;
+            }
+        });
 
-                break;
-            case 'editorColor':
-                Editor.toolbox.setColor();
-                break;
-            case 'editorInvert':
-                Editor.toolbox.setInvert();
-                break;
-            case 'editorPlus':
-                Editor.toolbox.setPlus();
-                break;
-            case 'editorMinus':
-                Editor.toolbox.setMinus();
-                break;
-            case 'editorExtend':
-                Editor.toolbox.setExtend();
-                break;
-            case 'editorCopy':
+        Editor.toolbox.previewGenerate.addEventListener('mouseenter', (event) => {
+            event.target.firstChild.style.animationPlayState = 'running';
+        });
 
-                break;
-            case 'editorPreview':
-                Editor.toolbox.getPreview();
-                break;
-            case 'editorSimple':
+        Editor.toolbox.previewGenerate.addEventListener('mouseleave', (event) => {
+            event.target.firstChild.style.animationPlayState = 'paused';
+        });
 
-                break;
-            default:
-                event.preventDefault();
-                event.stopPropagation();
-                break;
-        }
     });
 
 })();

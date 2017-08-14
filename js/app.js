@@ -36,6 +36,7 @@
             this.containerNode = document.querySelector('.editor-container');
             this.wordCount = document.getElementById('editorWordCount');
             this.tagErrors = document.getElementById('editorTagErrors');
+            this.keyWordWeight = document.getElementById('editorKeyWordWeight');
 
             this.timeout = null;
 
@@ -290,6 +291,7 @@
                     if (this.keywordNode.value) {
                         this.keywordText = this.keywordNode.value;
                     }
+                    Editor.getKeywordWeight();
                 }
 
             },
@@ -577,6 +579,26 @@
         },
         getKeywordWeight: function() {
 
+            let edContent = this.elementNode.textContent;
+            let keyword = this.toolbox.keywordText;
+            console.log(edContent);
+            console.log(keyword);
+
+            if (edContent.length === 0 || !edContent &&  keyword.length === 0 || !keyword) {
+                this.keyWordWeight.innerHTML = 'nothing yet';
+            } else {
+                let stringCount = edContent.match((/[a-z-'\w]+/gi) || []).length;
+                let substringCount = (edContent.match(new RegExp(keyword, 'gi')) || []).length;
+                let percent = ((substringCount / stringCount) * 100).toFixed(2);
+                if (percent < 0.5 || percent > 2.5) {
+                    let lowHigh = (percent < 0.5) ? 'low' : 'high';
+                    this.keyWordWeight.innerHTML = percent + '%, too ' + lowHigh + ', ';
+                } else {
+                    this.keyWordWeight.innerHTML = percent + '%, ';
+                }
+                let singularPlural = (substringCount <= 1) ? 'time' : 'times';
+                this.keyWordWeight.innerHTML += substringCount + ' ' + singularPlural;
+            }
         },
         keyDownHandler: function(event) {
             if (event.ctrlKey) {
@@ -623,6 +645,7 @@
 
                         this.getTagErrors();
                         this.getWordCount();
+                        this.getKeywordWeight();
 
                     }, 600);
                 }

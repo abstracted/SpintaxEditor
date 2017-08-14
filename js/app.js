@@ -1,3 +1,4 @@
+
 (function main() {
 
     const Env = {
@@ -40,7 +41,7 @@
 
             this.timeout = null;
 
-            this.debugMode = false;
+            this.debugMode = true;
             this.highlightMode = 'advanced';
 
             this.selection.init();
@@ -52,54 +53,54 @@
         },
         highlightRules: {
             simple: [
-                [true, 'before', 'curly-left-sentence', /(^([\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*))(\{)/, 'gm', '$1', '', '$4'],
+                [true, 'before', 'curly-left-sentence', /(^([\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/\|\}]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/\|\}]*))(\{)/, 'gm', '$1', '', '$4'],
 
-                [true, 'before', 'curly-left-sentence', /(<div>([\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*))(\{)/, 'g', '$1', '', '$4'],
+                [true, 'before', 'curly-left-sentence', /(<div>([\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/\|\}]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/\|\}]*))(\{)/, 'g', '$1', '', '$4'],
 
                 [false, '', 'curly-right-sentence', /(\})(?!.*\})/, 'gm', '', '', '$1'],
 
-                [true, 'after', 'curly-right-sentence', /(\})(?!<\/strong>)(([\|\{\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\|\{\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*)<\/div>)/, 'g', '', '$2', '$1'],
+                [true, 'after', 'curly-right-sentence', /(\})(?!<\/strong>)(([\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/\|\{]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/\|\{]*)<\/div>)/, 'g', '', '$2', '$1'],
 
-                [true, 'after', 'curly-right-sentence', /(\})(?!<\/strong>)(([\|\{\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\|\{\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*)<div>)/, 'g', '', '$2', '$1'],
+                [true, 'after', 'curly-right-sentence', /(\})(?!<\/strong>)(([\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/\|\{]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/\|\{]*)<div>)/, 'g', '', '$2', '$1'],
 
                 [true, 'before', 'curly-left-right-sentence', /([\.\?\!]{1})((<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}\}(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}(\s|&nbsp;){1}(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}\{)/, 'g', '$1', '', '$2'],
 
-                [true, 'before', 'vert-sentence', /(\}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*[\?\.\!]{1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*)(\|)(?=[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*\{)/, 'g', '$1', '', '$4'],
+                [true, 'before', 'vert-sentence', /(\}[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*[\?\.\!]{1}[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*)(\|)(?=[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*\{)/, 'g', '$1', '', '$4'],
 
-                [true, 'before', 'words-wordspin', /(\{|\|)([\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*)(?=\||\})/, 'g', '$1', '', '$2'],
+                [true, 'before', 'words-wordspin', /(\{|\|)([\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*)(?=\||\})/, 'g', '$1', '', '$2'],
 
-                [true, 'before', 'words-wordspin', /(\}|\|)([\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*)(?=\}|\|)/, 'g', '$1', '', '$2'],
+                [true, 'before', 'words-wordspin', /(\}|\|)([\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*)(?=\}|\|)/, 'g', '$1', '', '$2'],
 
-                [true, 'before', 'words-wordspin', /(\{|\|)([\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*)(?=\{|\|)/, 'g', '$1', '', '$2'],
+                [true, 'before', 'words-wordspin', /(\{|\|)([\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*)(?=\{|\|)/, 'g', '$1', '', '$2'],
                 [false, '', 'curly-left-wordspin', /(\{)(?!<\/strong>)/, 'g', '', '', '$1'],
                 [false, '', 'curly-right-wordspin', /(\})(?!((<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}(\s|&nbsp;){1}(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/spasn>){0,1}\{){0,1}(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}<\/strong>)/, 'g', '', '', '$1'],
                 [false, '', 'vert-wordspin', /(\|)(?!<\/strong>)/, 'g', '', '', '$1'],
                 [false, '', 'shortcode', /(\[[\s\w\=\-]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\s\w\=\-]*\])/, 'g', '', '', '$1'],
             ],
             advanced: [
-                [true, 'before', 'curly-left-sentence', /(^([\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*))(\{)/, 'gm', '$1', '', '$4'],
+                [true, 'before', 'curly-left-sentence', /(^([\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/\|\}]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/\|\}]*))(\{)/, 'gm', '$1', '', '$4'],
 
-                [true, 'before', 'curly-left-sentence', /(<div>([\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*))(\{)/, 'g', '$1', '', '$4'],
+                [true, 'before', 'curly-left-sentence', /(<div>([\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/\|\}]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/\|\}]*))(\{)/, 'g', '$1', '', '$4'],
 
                 [false, '', 'curly-right-sentence', /(\})(?!.*\})/, 'gm', '', '', '$1'],
 
-                [true, 'after', 'curly-right-sentence', /(\})(?!<\/strong>)(([\|\{\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\|\{\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*)<\/div>)/, 'g', '', '$2', '$1'],
+                [true, 'after', 'curly-right-sentence', /(\})(?!<\/strong>)(([\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/\|\{]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/\|\{]*)<\/div>)/, 'g', '', '$2', '$1'],
 
-                [true, 'after', 'curly-right-sentence', /(\})(?!<\/strong>)(([\|\{\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\|\{\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*)<div>)/, 'g', '', '$2', '$1'],
+                [true, 'after', 'curly-right-sentence', /(\})(?!<\/strong>)(([\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/\|\{]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/\|\{]*)<div>)/, 'g', '', '$2', '$1'],
 
-                [true, 'before', 'curly-right-wordspin', /(\|([\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*))(\})/, 'g', '$1', '', '$4'],
+                [true, 'before', 'curly-right-wordspin', /(\|([\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*))(\})/, 'g', '$1', '', '$4'],
 
-                [true, 'after', 'curly-left-wordspin', /(\{)(([\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*)\|)/, 'g', '', '$2', '$1'],
+                [true, 'after', 'curly-left-wordspin', /(\{)(([\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*)\|)/, 'g', '', '$2', '$1'],
 
-                [true, 'both', 'words-wordspin', /(<strong\s+class=\"syntax-highlight-curly-left-wordspin\s+syntax-highlight\">\{<\/strong>)([\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*)(\|)/, 'g', '$1', '$4', '$2'],
+		[true, 'before', 'words-wordspin', /(<strong\s+class=\"syntax-highlight-curly-left-wordspin\s+syntax-highlight\">\{<\/strong>)([\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*)(?=\|)/, 'g', '$1', '', '$2'],
 
-                [true, 'both', 'words-wordspin', /(\|)([\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*)(<strong\s+class=\"syntax-highlight-curly-right-wordspin\s+syntax-highlight\">\})/, 'g', '$1', '$4', '$2'],
+		[true, 'before', 'words-wordspin', /(\|)([\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*)(?=<strong\s+class=\"syntax-highlight-curly-right-wordspin\s+syntax-highlight\">\})/, 'g', '$1', '', '$2'],
 
-                [true, 'before', 'words-wordspin', /(\|)([\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id="[a-zA-Z]+\_\d+\_\d+"\s+class="[a-zA-Z]+"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*)(?=\|[\[\|\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\=\/]*<strong\s+class=\"syntax-highlight-curly-right-wordspin\ssyntax-highlight\">\})/, 'g', '$1', '', '$2'],
+		[true, 'before', 'words-wordspin', /(\|)([\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*(<span\s+id="[a-zA-Z]+\_\d+\_\d+"\s+class="[a-zA-Z]+"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*)(?=\|[\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/\|]*\})/, 'g', '$1', '', '$2'],
 
                 [true, 'before', 'vert-wordspin', /(<\/strong>)(\|)(?=<strong\s+class=\"syntax-highlight-words-wordspin\ssyntax-highlight\">)/, 'g', '$1', '', '$2'],
 
-                [true, 'before', 'vert-sentence', /(<strong\s+class=\"syntax-highlight-curly-right-wordspin\s+syntax-highlight\">\}<\/strong>[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*)(\|)(?=[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]*<strong\s+class=\"syntax-highlight-curly-left-wordspin\s+syntax-highlight\">{<\/strong>)/, 'g', '$1', '', '$3'],
+                [true, 'before', 'vert-sentence', /(<strong\s+class=\"syntax-highlight-curly-right-wordspin\s+syntax-highlight\">\}<\/strong>[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*)(\|)(?=[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]*<strong\s+class=\"syntax-highlight-curly-left-wordspin\s+syntax-highlight\">{<\/strong>)/, 'g', '$1', '', '$3'],
 
                 [false, '', 'shortcode', /(\[[\s\w\=\-]*(<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}[\s\w\=\-]*\])/, 'g', '', '', '$1'],
 
@@ -581,8 +582,6 @@
 
             let edContent = this.elementNode.textContent;
             let keyword = this.toolbox.keywordText;
-            console.log(edContent);
-            console.log(keyword);
 
             if (edContent.length === 0 || !edContent &&  keyword.length === 0 || !keyword) {
                 this.keyWordWeight.innerHTML = 'nothing yet';
@@ -789,18 +788,10 @@
         Base Rules to get you started:
         
         - General Charcters: Just matches words
-            - [\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,]
+            - [\[\]\.\!\@\#\$\%\&\_\-\=\:\;\'\"\?\,\*\(\)\w\s\t\d]
         - General Characters with HTML tags: matches words and html, should only be used for word spins
-            - [\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]
-        - General Characters, With Vert and Right Curly: For begin of para spins
-            - [\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]
-        - General Characters, With Vert and Left Curly: For end of para spins
-            - [\|\{\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]
-        
+            - [\[\]\.\!\@\#\$\%\&\_\-\:\;\'\"\?\,\*\(\)\w\s\t\d\<\>\-\=\/]       
         - Caret Position: Matches the caret position marker
             -  (<span\s+id=\"[a-zA-Z]+\_\d+\_\d+\"\s+class=\"[a-zA-Z]+\"\s+style=\"[a-zA-Z\-\:\;\d\s\.]+\">\W<\/span>){0,1}
- 
-        - Mixed, matches the cursor position and general characters
-            - ([\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*(<span\s+id="[a-zA-Z]+\_\d+\_\d+"\s+class="[a-zA-Z]+"\s+style="[a-zA-Z\-\:\;\d\s">\.]+\W<\/span>){0,1}[\|\}\[\]\.\w\s\t\d\!\@\#\$\%\&\_\-\:\;\'\"\?\,\<\>\-\=\/]*)
-            
+
 -------------------------------------------------------------------------------------*/

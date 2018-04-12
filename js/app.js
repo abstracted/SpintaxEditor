@@ -143,7 +143,8 @@
                 this.caretPos = null;
             },
             setSelectAll: function() {
-                rangy.selectNodeContents(Editor.elementNode);
+		let range = rangy.createRange();    
+                range.selectNodeContents(Editor.elementNode);
             },
             setCollapsed: function() {
                 rangy.getSelection().collapseToEnd();
